@@ -9,33 +9,33 @@ and `paths`, respectively.
 import importlib
 import json
 import logging
-from pathlib import Path
 import os
 import sys
-from typing import Callable, Any
+from pathlib import Path
+from typing import Any, Callable
 
 import yaml
 
 
-def read_json(path: str) -> dict:
+def read_json(path: Path) -> dict:
     with open(path, "r") as fp:
         data = json.load(fp)
     return data
 
 
-def read_text(path: str) -> list[str]:
+def read_text(path: Path) -> list[str]:
     with open(path, "r") as fp:
         return fp.readlines()
 
 
-def read_yaml(path: str) -> dict:
+def read_yaml(path: Path) -> dict:
     with open(path, "r") as fp:
         return yaml.safe_load(fp)
 
 
-def delayed_reader(module_name: str, func_name: str, alias: str | None = None):
+def delayed_reader(module_name: str, func_name: str, alias: str | None = None) -> Callable:
     """Return a callable that lazily imports and calls the given function."""
-    def reader(path, *args, **kwargs):
+    def reader(path: Path, *args, **kwargs):
         module = importlib.import_module(module_name)
         globals()[alias or module_name] = module
         func = getattr(module, func_name)
