@@ -1,2 +1,3 @@
 build/
 src/peruse.egg-info/*
+src/peruse/__pycache__/*
