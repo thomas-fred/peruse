@@ -1,0 +1,4 @@
+#!/bin/bash
+set -ex
+micromamba run --name peruse python -S peruse.py "$@"
+
