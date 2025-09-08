@@ -27,6 +27,24 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "black",
+    "ruff"
 ]
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.ruff.lint]
+select = [
+    "F",   # pyflakes
+    "E",   # pycodestyle
+    "I",   # isort
+    "RUF", # ruff-specific rules
+]
+fixable = ["ALL"]
 
