@@ -11,7 +11,7 @@ Install with:
 micromamba create -f env.yaml -y
 ```
 
-Then place this folder, or a symlink to it on your `PATH`.
+Then add this folder (or a symlink to it) to your `PATH`.
 
 ## Usage
 

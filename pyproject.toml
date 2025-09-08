@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling", "hatch-vcs"]
-build-backend = "hatchling.build"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "peruse"
-dynamic = "0.1.0"
+version = "0.1.0"
 description = "for inspecting data files from a Python prompt"
 readme = "README.md"
 license = "MIT"
@@ -12,10 +12,7 @@ authors = [{ name = "Fred Thomas", email = "fred.thomas@eci.ox.ac.uk" }]
 keywords = []
 classifiers = [
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Topic :: Scientific/Engineering :: GIS",
     "Topic :: Utilities",
 ]
 requires-python = ">=3.13"
@@ -29,14 +26,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = []
-
-[tool.hatch.version]
-source = "vcs"
-
-[tool.hatch.build.targets.sdist]
-include = ["src"]
-
-[tool.pytest.ini_options]
-pythonpath = ["src"]
+dev = [
+    "black",
+]
 
