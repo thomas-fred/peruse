@@ -4,16 +4,6 @@ open a Python prompt.
 
 Paths and opened files are available in integer keyed dictionaries, `data`
 and `paths`, respectively.
-
-You will require an appropriate environment to run this script. Install with:
-```
-micromamba create -f peruse-env.yaml -y
-```
-
-Add this folder to your path and run the wrapper script `peruse`:
-```
-peruse <file_1> <file_2> <file_n>
-```
 """
 
 import importlib
