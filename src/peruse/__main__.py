@@ -76,6 +76,7 @@ EXTENSION_READER: dict[str, Callable] = {
     ".txt": read_text,
     ".xlsx": delayed_reader("pandas", "read_excel", alias="pd"),
     ".yaml": read_yaml,
+    ".yml": read_yaml,
     ".zarr": delayed_reader("xarray", "open_zarr", alias="xr"),
 }
 
