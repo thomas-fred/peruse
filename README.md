@@ -8,6 +8,8 @@ Written by Fred Thomas
 
 Install with:
 ```shell
+git clone git@github.com:thomas-fred/peruse.git
+cd peruse
 micromamba create -f env.yaml -y
 ```
 
