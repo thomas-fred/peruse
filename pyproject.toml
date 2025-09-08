@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "peruse"
-dynamic = ["version"]
+dynamic = "0.1.0"
 description = "for inspecting data files from a Python prompt"
 readme = "README.md"
 license = "MIT"
@@ -18,8 +18,15 @@ classifiers = [
     "Topic :: Scientific/Engineering :: GIS",
     "Topic :: Utilities",
 ]
-requires-python = ">=3.11"
-dependencies = ["pandas", "numpy", "xarray"]
+requires-python = ">=3.13"
+dependencies = [
+    "geopandas",
+    "pandas",
+    "pyarrow",
+    "scipy",
+    "xarray",
+    "pyyaml",
+]
 
 [project.optional-dependencies]
 dev = []
@@ -28,7 +35,7 @@ dev = []
 source = "vcs"
 
 [tool.hatch.build.targets.sdist]
-include = ["/src"]
+include = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

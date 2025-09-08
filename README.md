@@ -15,6 +15,7 @@ Then place this folder, or a symlink to it on your `PATH`.
 
 ## Usage
 
+Invoke peruse with the paths to data files you want to inspect:
 ```
 peruse <file_1> <file_2> <...> <file_n>
 ```
