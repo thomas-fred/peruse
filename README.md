@@ -11,11 +11,16 @@ Install with:
 micromamba create -f env.yaml -y
 ```
 
-Then add this folder (or a symlink to it) to your `PATH`.
+Then add this folder to your `PATH`. Or alternatively, add a symlink to
+the `peruse` script from a directory already on your `$PATH`.
 
 ## Usage
 
 Invoke peruse with the paths to data files you want to inspect:
 ```
-peruse <file_1> <file_2> <...> <file_n>
+peruse <file_0> <file_1> <...> <file_n>
 ```
+
+You'll be given a Python prompt with the deserialized files available as values
+in the `data` dictionary. Keys to `data` are the index of the respective script
+argument, e.g. `0`, `1`, etc.
