@@ -45,6 +45,7 @@ def delayed_reader(module_name: str, func_name: str, alias: str | None = None) -
 
 EXTENSION_READER: dict[str, Callable] = {
     ".csv": delayed_reader("pandas", "read_csv", alias="pd"),
+    ".geojson": delayed_reader("geopandas", "read_file", alias="gpd"),
     ".geoparquet": delayed_reader("geopandas", "read_parquet", alias="gpd"),
     ".gpkg": delayed_reader("geopandas", "read_file", alias="gpd"),
     ".gpq": delayed_reader("geopandas", "read_parquet", alias="gpd"),
