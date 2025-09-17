@@ -1,47 +1,19 @@
 """
 Try and read the contents of data file paths passed from command line, then
 open a Python prompt.
-
-Paths and opened files are available in integer keyed dictionaries, `data`
-and `paths`, respectively.
 """
 
-import importlib
-import json
 import logging
 import os
+import string
 import sys
 from pathlib import Path
-from typing import Any, Callable
+from types import SimpleNamespace
+from typing import Callable
 
-import yaml
+from peruse.readers import delayed_reader, read_json, read_text, read_yaml
 
-
-def read_json(path: Path) -> dict:
-    with open(path, "r") as fp:
-        data = json.load(fp)
-    return data
-
-
-def read_text(path: Path) -> list[str]:
-    with open(path, "r") as fp:
-        return fp.readlines()
-
-
-def read_yaml(path: Path) -> dict:
-    with open(path, "r") as fp:
-        return yaml.safe_load(fp)
-
-
-def delayed_reader(module_name: str, func_name: str, alias: str | None = None) -> Callable:
-    """Return a callable that lazily imports and calls the given function."""
-    def reader(path: Path, *args, **kwargs):
-        module = importlib.import_module(module_name)
-        globals()[alias or module_name] = module
-        func = getattr(module, func_name)
-        return func(path, *args, **kwargs)
-    return reader
-
+MAX_FILE_READS = 2**8
 
 EXTENSION_READER: dict[str, Callable] = {
     ".csv": delayed_reader("pandas", "read_csv", alias="pd"),
@@ -72,44 +44,66 @@ EXTENSION_READER: dict[str, Callable] = {
 }
 
 
-if __name__ == "__main__":
+def string_refs(count: int) -> list[str]:
+    """Generate the Excel column name sequence to use as short file references."""
+    alpha: str = string.ascii_lowercase
+    refs: list[str] = []
+    while len(refs) < count:
+        floor: int = len(refs) // 26
+        mod: int = len(refs) % 26
+        if floor < 1:
+            refs.append(alpha[mod])
+        else:
+            refs.append(f"{alpha[floor - 1]}{alpha[mod]}")
+    return refs
 
-    logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
 
-    if len(sys.argv) < 2:
-        raise ValueError(
-            f"Require at least one path to try and open, given {len(sys.argv) - 1}"
-        )
+def read(paths: list[str]) -> tuple[SimpleNamespace, SimpleNamespace]:
+    """
+    Try and read the contents of each path.
 
-    paths: dict[int, str] = {}
-    data: dict[int, Any] = {}
-    for i, path in enumerate(sys.argv[1:]):
+    Return objects containing the paths, `p` and deserialised data `x`, with
+    short string references (e.g. "a", "b", ..., "z", "aa", "ab", ...) as
+    attribute names for retrieval.
+    """
+    x = SimpleNamespace()
+    p = SimpleNamespace()
+    for i, (ref, path) in enumerate(zip(string_refs(len(paths)), paths)):
 
-        path = Path(path)
-        paths[i] = path
-        data[i] = None
+        setattr(p, ref, path)
+        setattr(x, ref, None)
 
         if not path.exists():
             logging.info(f"Couldn't find {path} from {os.getcwd()}")
             continue
 
         try:
-            extension, = path.suffixes
-        except ValueError:
-            logging.info(f"Need exactly one file extension for {path.name}")
-            continue
-
-        try:
-            reader: Callable = EXTENSION_READER[extension.lower()]
+            reader: Callable = EXTENSION_READER[path.suffix.lower()]
         except KeyError:
-            logging.info(f"Don't know how to open {extension} files")
+            logging.info(f"Don't know how to open {path.suffix.lower()} files")
             continue
 
         try:
-            data[i] = reader(path)
+            setattr(x, ref, reader(path))
         except Exception as error:
             logging.info(error)
             continue
 
-        logging.info(f"data[{i}] = {path}")
+        logging.info(f"x.{ref} = {path}")
+
+    return p, x
+
+
+if __name__ == "__main__":
+
+    logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
+
+    _, *paths = sys.argv
+
+    if not paths:
+        raise ValueError("Require at least one path to try and open")
+    elif len(paths) > MAX_FILE_READS:
+        raise ValueError(f"Cannot read more than {MAX_FILE_READS} files")
+    else:
+        p, x = read([Path(path) for path in paths])
 
