@@ -11,7 +11,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Callable
 
-from peruse.readers import delayed_reader, read_json, read_text, read_yaml
+from peruse.readers import delayed_reader, read_json, read_text, read_toml, read_yaml
 
 MAX_FILE_READS = 2**8
 
@@ -36,6 +36,7 @@ EXTENSION_READER: dict[str, Callable] = {
     ".shp": delayed_reader("geopandas", "read_file", alias="gpd"),
     ".tif": delayed_reader("xarray", "open_dataset", alias="xr"),
     ".tiff": delayed_reader("xarray", "open_dataset", alias="xr"),
+    ".toml": read_toml,
     ".txt": read_text,
     ".xlsx": delayed_reader("pandas", "read_excel", alias="pd"),
     ".yaml": read_yaml,

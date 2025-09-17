@@ -1,5 +1,6 @@
 import importlib
 import json
+import tomllib
 from pathlib import Path
 from typing import Callable
 
@@ -33,6 +34,11 @@ def read_json(path: Path) -> dict:
 def read_text(path: Path) -> list[str]:
     with open(path, "r") as fp:
         return fp.readlines()
+
+
+def read_toml(path: Path) -> dict:
+    with open(path, "rb") as fp:
+        return tomllib.load(fp)
 
 
 def read_yaml(path: Path) -> dict:
