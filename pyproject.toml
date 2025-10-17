@@ -18,6 +18,7 @@ classifiers = [
 requires-python = ">=3.13"
 dependencies = [
     "geopandas",
+    "netcdf4",
     "pandas",
     "pyarrow",
     "scipy",
