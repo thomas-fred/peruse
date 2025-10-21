@@ -19,6 +19,7 @@ requires-python = ">=3.13"
 dependencies = [
     "geopandas",
     "matplotlib",
+    "netcdf4",
     "pandas",
     "pyarrow",
     "scipy",
