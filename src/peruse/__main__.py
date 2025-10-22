@@ -78,10 +78,6 @@ def read(paths: list[str]) -> tuple[SimpleNamespace, SimpleNamespace]:
             logging.info(f"Couldn't find {path} from {os.getcwd()}")
             continue
 
-        if path.is_dir():
-            logging.info(f"{path} is a directory, skipping")
-            continue
-
         try:
             reader: Callable = EXTENSION_READER[path.suffix.lower()]
         except KeyError:
