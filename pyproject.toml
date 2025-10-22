@@ -22,9 +22,11 @@ dependencies = [
     "netcdf4",
     "pandas",
     "pyarrow",
+    "rasterio",
     "scipy",
     "xarray",
     "pyyaml",
+    "zarr",
 ]
 
 [project.optional-dependencies]
